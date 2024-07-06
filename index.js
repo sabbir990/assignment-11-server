@@ -60,9 +60,14 @@ async function run() {
             }
 
             const updateVolunteerNumber = await volunteerPosts.updateOne(filter, updateDoc)
-
-            console.log(updateVolunteerNumber)
             res.send(result);
+        })
+
+        app.get('/myVolunteerPosts/:email', async(req, res) => {
+            const email = req.params.email;
+            const query = {organizer_email : email};
+            const result = await volunteerPosts.find(query).toArray();
+            res.send(result)
         })
     } finally {
         
