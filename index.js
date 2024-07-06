@@ -106,6 +106,20 @@ async function run() {
             const result = await volunteerPosts.deleteOne(query);
             res.send(result);
         })
+
+        app.get('/volunteerRequests/:email', async(req, res) => {
+            const email = req.params.email;
+            const query = {volunteer_email : email};
+            const result = await beAVolunteerCollection.find(query).toArray();
+            res.send(result)
+        })
+
+        app.delete('/deleteVolunteerRequest/:id', async(req, res) => {
+            const id = req.params.id;
+            const query = {_id : new ObjectId(id)};
+            const result = await beAVolunteerCollection.deleteOne(query);
+            res.send(result)
+        })
     } finally {
         
     }
