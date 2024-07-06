@@ -99,6 +99,13 @@ async function run() {
             const result = await volunteerPosts.updateOne(filter, updateDoc, options);
             res.send(result);
         })
+
+        app.delete('/deleteMyPost/:id', async(req, res) => {
+            const id = req.params.id;
+            const query = {_id : new ObjectId(id)};
+            const result = await volunteerPosts.deleteOne(query);
+            res.send(result);
+        })
     } finally {
         
     }
