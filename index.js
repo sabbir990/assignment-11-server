@@ -31,6 +31,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         const volunteerPosts = client.db('VolunteerDB').collection('volunteerPosts');
+        const beAVolunteerCollection = client.db('VolunteerDB').collection('beAVolunteer');
 
         app.post('/volunteerPosts', async(req, res) => {
             const post = req.body;
@@ -48,6 +49,20 @@ async function run() {
             const query = {_id : new ObjectId(id)};
             const result = await volunteerPosts.findOne(query);
             res.send(result)
+        })
+
+        app.post('/beAVolunteer', async(req, res) => {
+            const body = req.body;
+            const result = await beAVolunteerCollection.insertOne(body);
+            const filter = {_id : new ObjectId(body.id)};
+            const updateDoc = {
+                $inc : {volunteer_number : -1}
+            }
+
+            const updateVolunteerNumber = await volunteerPosts.updateOne(filter, updateDoc)
+
+            console.log(updateVolunteerNumber)
+            res.send(result);
         })
     } finally {
         
