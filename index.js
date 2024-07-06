@@ -69,6 +69,36 @@ async function run() {
             const result = await volunteerPosts.find(query).toArray();
             res.send(result)
         })
+
+        app.get('/updateMyPost/:id', async(req, res) => {
+            const id = req.params.id;
+            const query = {_id : new ObjectId(id)};
+            const result = await volunteerPosts.findOne(query);
+            res.send(result);
+        })
+
+        app.put('/updateMyPost/:id', async(req, res) => {
+            const id = req.params.id;
+            const updatedData = req.body;
+            const filter = {_id : new ObjectId(id)};
+            const options = {upsert : true}
+            const updateDoc = {
+                $set : {
+                    thumbnail : updatedData.thumbnail,
+                    post_title : updatedData.post_title,
+                    description : updatedData.description,
+                    category : updatedData.category,
+                    location : updatedData.location,
+                    volunteer_number : updatedData.volunteer_number,
+                    deadline : updatedData.deadline,
+                    organizer_name : updatedData.organizer_name,
+                    organizer_email : updatedData.organizer_email
+                }
+            }
+
+            const result = await volunteerPosts.updateOne(filter, updateDoc, options);
+            res.send(result);
+        })
     } finally {
         
     }
